@@ -30,3 +30,17 @@ To run the app locally, follow these steps:
 1. Clone the repository:
    ```sh
    git clone https://github.com/yourusername/baby-names-app.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd baby-names-app
+   ```
+3. Open index.html in your browser.
+
+## Contributing
+
+Feel free to fork this repository, make enhancements, and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This project is open source and available under the MIT License.
