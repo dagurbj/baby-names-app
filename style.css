@@ -20,7 +20,7 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     position: relative;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .buttons {
@@ -65,9 +65,11 @@ button:focus {
 .card.swipe-right {
     transform: translateX(100%);
     opacity: 0;
+    background-color: green;
 }
 
 .card.swipe-left {
     transform: translateX(-100%);
     opacity: 0;
+    background-color: red;
 }

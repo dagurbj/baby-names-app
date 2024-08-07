@@ -1,4 +1,4 @@
-const names = ["Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Sophia", "Mason", "Isabella", "Logan"];
+let names = [];
 let currentIndex = 0;
 let approvedNames = JSON.parse(localStorage.getItem('approvedNames')) || [];
 let rejectedNames = JSON.parse(localStorage.getItem('rejectedNames')) || [];
@@ -12,6 +12,13 @@ const progressDisplay = document.getElementById('progress-display');
 const shortlistElement = document.getElementById('shortlist');
 const showShortlistButton = document.getElementById('show-shortlist-button');
 const nameCard = document.getElementById('name-card');
+
+async function loadNames() {
+    const response = await fetch('names.txt');
+    const text = await response.text();
+    names = text.split('\n').map(name => name.trim()).filter(name => name !== '');
+    updateNameDisplay();
+}
 
 function updateProgressDisplay() {
     progressDisplay.textContent = `Approved: ${approvedNames.length}, Rejected: ${rejectedNames.length}, Total: ${names.length}`;
@@ -37,6 +44,9 @@ function updateNameDisplay() {
     const nextName = getRandomName();
     if (nextName) {
         nameDisplay.textContent = nextName;
+        nameCard.style.transform = 'translateX(0)';
+        nameCard.style.opacity = '1';
+        nameCard.style.backgroundColor = '';  // Reset background color
     } else {
         nameDisplay.textContent = "No more names!";
         document.querySelector('.buttons').style.display = 'none';
@@ -51,6 +61,7 @@ function handleAccept() {
         lastEvaluatedName = currentName;
         lastEvaluation = 'approved';
         localStorage.setItem('approvedNames', JSON.stringify(approvedNames));
+        nameCard.style.transform = 'translateX(0)';  // Reset position
         updateNameDisplay();
     }
 }
@@ -62,6 +73,7 @@ function handleReject() {
         lastEvaluatedName = currentName;
         lastEvaluation = 'rejected';
         localStorage.setItem('rejectedNames', JSON.stringify(rejectedNames));
+        nameCard.style.transform = 'translateX(0)';  // Reset position
         updateNameDisplay();
     }
 }
@@ -79,6 +91,9 @@ function handleUndo() {
         lastEvaluatedName = null;
         lastEvaluation = null;
         document.querySelector('.buttons').style.display = 'flex';
+        nameCard.style.transform = 'translateX(0)';
+        nameCard.style.opacity = '1';
+        nameCard.style.backgroundColor = '';  // Reset background color
         updateProgressDisplay();
     }
 }
@@ -93,6 +108,13 @@ function handleTouchMove(event) {
     const currentX = event.touches[0].clientX;
     const deltaX = currentX - startX;
     nameCard.style.transform = `translateX(${deltaX}px)`;
+
+    // Change background color based on swipe direction
+    if (deltaX > 0) {
+        nameCard.style.backgroundColor = `rgba(0, 255, 0, ${Math.min(deltaX / 300, 1)})`;
+    } else {
+        nameCard.style.backgroundColor = `rgba(255, 0, 0, ${Math.min(-deltaX / 300, 1)})`;
+    }
 }
 
 function handleTouchEnd(event) {
@@ -116,6 +138,7 @@ function handleTouchEnd(event) {
         }, 300);
     } else {
         nameCard.style.transform = 'translateX(0)';
+        nameCard.style.backgroundColor = '';  // Reset background color
     }
 
     isSwiping = false;
@@ -129,4 +152,4 @@ nameCard.addEventListener('touchmove', handleTouchMove);
 nameCard.addEventListener('touchend', handleTouchEnd);
 showShortlistButton.addEventListener('click', showShortlist);
 
-updateNameDisplay();
+loadNames();
