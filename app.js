@@ -6,12 +6,61 @@ let lastEvaluatedName = null;
 let lastEvaluation = null;
 let startX = 0;
 let isSwiping = false;
+let icelandicVoices = [];
 
 const nameDisplay = document.getElementById('name-display');
 const progressDisplay = document.getElementById('progress-display');
 const shortlistElement = document.getElementById('shortlist');
-const showShortlistButton = document.getElementById('show-shortlist-button');
+const toggleShortlistButton = document.getElementById('toggle-shortlist-button');
 const nameCard = document.getElementById('name-card');
+const undoButton = document.getElementById('undo-button');
+
+function initializeVoices() {
+    return new Promise((resolve) => {
+        const voices = speechSynthesis.getVoices();
+        if (voices.length !== 0) {
+            listVoices();
+            resolve();
+        } else {
+            speechSynthesis.onvoiceschanged = () => {
+                listVoices();
+                resolve();
+            };
+        }
+    });
+}
+
+// Function to list voices and filter for Icelandic voices
+function listVoices() {
+    const voices = speechSynthesis.getVoices();
+    icelandicVoices = voices.filter(voice => voice.lang === 'is-IS');
+
+    if (icelandicVoices.length > 0) {
+        console.log('Icelandic voices found:', icelandicVoices);
+    } else {
+        console.log('No Icelandic voices found.');
+    }
+}
+
+async function speakName(name) {
+    await initializeVoices();
+
+    if (icelandicVoices.length === 0) {
+        console.warn('No Icelandic voice available, remaining silent.');
+        return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * icelandicVoices.length);
+    const utterance = new SpeechSynthesisUtterance(name);
+    utterance.voice = icelandicVoices[randomIndex];
+    utterance.onstart = () => {
+        console.log('Speech started for:', name);
+    };
+    utterance.onend = () => {
+        console.log('Speech ended for:', name);
+    };
+    speechSynthesis.speak(utterance);
+}
 
 async function loadNames() {
     const response = await fetch('names.txt');
@@ -24,9 +73,15 @@ function updateProgressDisplay() {
     progressDisplay.textContent = `Approved: ${approvedNames.length}, Rejected: ${rejectedNames.length}, Total: ${names.length}`;
 }
 
-function showShortlist() {
-    shortlistElement.innerHTML = "<ul>" + approvedNames.map(name => `<li>${name}</li>`).join('') + "</ul>";
-    shortlistElement.style.display = 'block';
+function toggleShortlist() {
+    if (shortlistElement.style.display === 'none' || !shortlistElement.style.display) {
+        shortlistElement.innerHTML = "<ul>" + approvedNames.map(name => `<li>${name}</li>`).join('') + "</ul>";
+        shortlistElement.style.display = 'block';
+        toggleShortlistButton.textContent = "Hide Shortlist";
+    } else {
+        shortlistElement.style.display = 'none';
+        toggleShortlistButton.textContent = "Show Shortlist";
+    }
 }
 
 function getRandomName() {
@@ -44,6 +99,7 @@ function updateNameDisplay() {
     const nextName = getRandomName();
     if (nextName) {
         nameDisplay.textContent = nextName;
+        speakName(nextName); // Speak the name
         nameCard.style.transform = 'translateX(0)';
         nameCard.style.opacity = '1';
         nameCard.style.backgroundColor = '';  // Reset background color
@@ -52,6 +108,15 @@ function updateNameDisplay() {
         document.querySelector('.buttons').style.display = 'none';
     }
     updateProgressDisplay();
+    updateUndoButtonState();
+}
+
+function updateUndoButtonState() {
+    if (lastEvaluatedName) {
+        undoButton.disabled = false;
+    } else {
+        undoButton.disabled = true;
+    }
 }
 
 function handleAccept() {
@@ -88,6 +153,7 @@ function handleUndo() {
             localStorage.setItem('rejectedNames', JSON.stringify(rejectedNames));
         }
         nameDisplay.textContent = lastEvaluatedName;
+        speakName(lastEvaluatedName);
         lastEvaluatedName = null;
         lastEvaluation = null;
         document.querySelector('.buttons').style.display = 'flex';
@@ -95,6 +161,7 @@ function handleUndo() {
         nameCard.style.opacity = '1';
         nameCard.style.backgroundColor = '';  // Reset background color
         updateProgressDisplay();
+        updateUndoButtonState();
     }
 }
 
@@ -108,6 +175,7 @@ function handleTouchMove(event) {
     const currentX = event.touches[0].clientX;
     const deltaX = currentX - startX;
     nameCard.style.transform = `translateX(${deltaX}px)`;
+    event.preventDefault(); // Prevent default touch behavior
 
     // Change background color based on swipe direction
     if (deltaX > 0) {
@@ -147,9 +215,18 @@ function handleTouchEnd(event) {
 document.getElementById('accept-button').addEventListener('click', handleAccept);
 document.getElementById('reject-button').addEventListener('click', handleReject);
 document.getElementById('undo-button').addEventListener('click', handleUndo);
-nameCard.addEventListener('touchstart', handleTouchStart);
-nameCard.addEventListener('touchmove', handleTouchMove);
-nameCard.addEventListener('touchend', handleTouchEnd);
-showShortlistButton.addEventListener('click', showShortlist);
+document.getElementById('speak-icon').addEventListener('click', () => speakName(nameDisplay.textContent));
+document.body.addEventListener('touchstart', handleTouchStart, { passive: false });
+document.body.addEventListener('touchmove', handleTouchMove, { passive: false });
+document.body.addEventListener('touchend', handleTouchEnd, { passive: false });
+toggleShortlistButton.addEventListener('click', toggleShortlist);
 
-loadNames();
+// Load names and initialize app
+async function loadNames() {
+    const response = await fetch('names.txt');
+    const text = await response.text();
+    names = text.split('\n').map(name => name.trim()).filter(name => name !== '');
+    updateNameDisplay();
+}
+
+initializeVoices().then(loadNames);

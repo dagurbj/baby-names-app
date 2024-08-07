@@ -9,7 +9,10 @@
 <body>
     <div class="container">
         <div class="card" id="name-card">
-            <h1 id="name-display"></h1>
+            <div id="name-icon-container">
+                <h1 id="name-display"></h1>
+                <span id="speak-icon" class="icon">🔊</span>
+            </div>
             <div class="buttons">
                 <button id="reject-button">❌</button>
                 <button id="accept-button">✅</button>
@@ -18,7 +21,7 @@
         </div>
         <div class="progress">
             <p id="progress-display"></p>
-            <button id="show-shortlist-button">Show Shortlist</button>
+            <button id="toggle-shortlist-button">Show Shortlist</button>
         </div>
         <div class="shortlist" id="shortlist"></div>
     </div>

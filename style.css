@@ -73,3 +73,28 @@ button:focus {
     opacity: 0;
     background-color: red;
 }
+
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+#name-card {
+    position: relative;
+}
+
+#name-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#name-display {
+    margin-right: 10px;
+}
+
+#speak-icon {
+    cursor: pointer;
+    font-size: 24px;
+}
