@@ -21,7 +21,7 @@ This is a simple swipe left, swipe right app to help users choose a name for the
 
 ## Hosting
 
-This app is hosted on GitHub Pages. You can access it at: [GitHub Pages Link](https://yourusername.github.io/baby-names-app).
+This app is hosted on GitHub Pages. You can access it at: [GitHub Pages Link](https://dagurbj.github.io/baby-names-app).
 
 ## Development
 
