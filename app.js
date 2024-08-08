@@ -14,6 +14,7 @@ const shortlistElement = document.getElementById('shortlist');
 const toggleShortlistButton = document.getElementById('toggle-shortlist-button');
 const nameCard = document.getElementById('name-card');
 const undoButton = document.getElementById('undo-button');
+const speakIcon = document.getElementById('speak-icon');
 
 function initializeVoices() {
     return new Promise((resolve) => {
@@ -46,7 +47,8 @@ async function speakName(name) {
     await initializeVoices();
 
     if (icelandicVoices.length === 0) {
-        console.warn('No Icelandic voice available, remaining silent.');
+        console.warn('No Icelandic voice available, using audio fallback.');
+        playAudioFallback(name);
         return;
     }
 
@@ -60,6 +62,12 @@ async function speakName(name) {
         console.log('Speech ended for:', name);
     };
     speechSynthesis.speak(utterance);
+}
+
+function playAudioFallback(name) {
+    const audioElement = document.getElementById('audio-fallback');
+    audioElement.src = `audio/${name}.webm`;
+    audioElement.play();
 }
 
 async function loadNames() {
