@@ -1,16 +1,78 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f0f0;
+    min-height: 100vh;
+}
+
+/* Center the card in index.html */
+.index-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
+}
+
+/* Styles specific to shortlist.html */
+.shortlist-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
 }
 
 .container {
     width: 300px;
     text-align: center;
+}
+
+/* Container specific to the shortlist page */
+.shortlist-container {
+    width: 90%;
+    max-width: 500px;
+    text-align: left;
+    margin: 20px auto; /* Ensure proper spacing from the top */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Start content at the top */
+    align-items: stretch;
+    overflow-y: auto; /* Ensure the container allows vertical scrolling */
+}
+
+/* Card styling specific to the shortlist page */
+.shortlist-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    max-height: 80vh; /* Limit the height to make the card scrollable */
+    overflow-y: auto; /* Allow scrolling within the card */
+}
+
+.shortlist-card h1, .shortlist-card h2 {
+    margin: 10px 0;
+    color: #333;
+}
+
+.shortlist-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.shortlist-card button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #333;
+    color: #fff;
+}
+
+.shortlist-card button:focus {
+    outline: none;
 }
 
 .card {
@@ -97,4 +159,14 @@ button:disabled {
 #speak-icon {
     cursor: pointer;
     font-size: 24px;
+}
+
+h1, h2 {
+    margin: 10px 0;
+    color: #333;
+}
+
+p {
+    margin: 5px 0;
+    color: #555;
 }

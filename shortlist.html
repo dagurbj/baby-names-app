@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shortlist</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="shortlist-page">
+    <div class="shortlist-container">
+        <div class="shortlist-card">
+            <h1>Shortlist</h1>
+            <div id="shortlist-content"></div>
+            <button onclick="window.location.href='index.html'">Back to Name Selection</button>
+        </div>
+    </div>
+    <script>
+        const approvedNames = JSON.parse(localStorage.getItem('approvedNames')) || [];
+        const shortlistContent = document.getElementById('shortlist-content');
+
+        // Sort names alphabetically
+        approvedNames.sort();
+
+        // Group names by the first letter
+        let groupedNames = {};
+        approvedNames.forEach(name => {
+            const firstLetter = name.charAt(0).toUpperCase();
+            if (!groupedNames[firstLetter]) {
+                groupedNames[firstLetter] = [];
+            }
+            groupedNames[firstLetter].push(name);
+        });
+
+        // Display grouped names
+        for (const letter in groupedNames) {
+            if (groupedNames.hasOwnProperty(letter)) {
+                shortlistContent.innerHTML += `<h2>${letter}</h2>`;
+                groupedNames[letter].forEach(name => {
+                    shortlistContent.innerHTML += `<p>${name}</p>`;
+                });
+            }
+        }
+    </script>
+</body>
+</html>

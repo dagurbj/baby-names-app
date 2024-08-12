@@ -10,8 +10,6 @@ let icelandicVoices = [];
 
 const nameDisplay = document.getElementById('name-display');
 const progressDisplay = document.getElementById('progress-display');
-const shortlistElement = document.getElementById('shortlist');
-const toggleShortlistButton = document.getElementById('toggle-shortlist-button');
 const nameCard = document.getElementById('name-card');
 const undoButton = document.getElementById('undo-button');
 const speakIcon = document.getElementById('speak-icon');
@@ -79,17 +77,6 @@ async function loadNames() {
 
 function updateProgressDisplay() {
     progressDisplay.textContent = `Approved: ${approvedNames.length}, Rejected: ${rejectedNames.length}, Total: ${names.length}`;
-}
-
-function toggleShortlist() {
-    if (shortlistElement.style.display === 'none' || !shortlistElement.style.display) {
-        shortlistElement.innerHTML = "<ul>" + approvedNames.map(name => `<li>${name}</li>`).join('') + "</ul>";
-        shortlistElement.style.display = 'block';
-        toggleShortlistButton.textContent = "Hide Shortlist";
-    } else {
-        shortlistElement.style.display = 'none';
-        toggleShortlistButton.textContent = "Show Shortlist";
-    }
 }
 
 function getRandomName() {
@@ -227,7 +214,6 @@ document.getElementById('speak-icon').addEventListener('click', () => speakName(
 document.body.addEventListener('touchstart', handleTouchStart, { passive: false });
 document.body.addEventListener('touchmove', handleTouchMove, { passive: false });
 document.body.addEventListener('touchend', handleTouchEnd, { passive: false });
-toggleShortlistButton.addEventListener('click', toggleShortlist);
 
 // Load names and initialize app
 async function loadNames() {
