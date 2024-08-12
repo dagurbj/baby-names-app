@@ -4,11 +4,12 @@ This is a simple swipe left, swipe right app to help users choose a name for the
 
 ## Features
 
-- Swipe left to reject a name.
-- Swipe right to accept a name.
-- Undo the last action.
-- View the shortlist of approved names.
-- View progress (how many names have been approved/rejected out of the total list).
+- __Swipe Left to Reject:__ Easily dismiss a name that doesn't fit by swiping left.
+- __Swipe Right to Approve:__ Swipe right to add a name to your shortlist of favorites.
+- __Undo Last Action:__ Made a mistake? Quickly undo your last swipe.
+- __View Approved Shortlist:__ Access and review your list of approved names anytime.
+- __Track Your Progress:__ See how many names you've approved or rejected out of the total.
+- __Hear Icelandic Pronunciation:__ Listen to an accurate Icelandic pronunciation of each name, powered by AI.
 
 ## How to Use
 
